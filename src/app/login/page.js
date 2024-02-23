@@ -27,6 +27,10 @@ const Login = () => {
     });
 
     if (filterUser[0]?.email) {
+      if (user.email) {
+        router.push("/");
+        toast.success("Login Success");
+      }
       dispatch(setUser(filterUser[0]));
       router.push("/");
       toast.success("Login Success");
