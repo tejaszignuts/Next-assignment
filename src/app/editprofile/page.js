@@ -19,37 +19,43 @@ const EditProfile = () => {
   if (!user.email) {
     router.push("/login");
   }
+
   const onSubmit = (data) => {
-    userList.map((userIs) => {
-      if (userIs.email === data.email) {
-        toast.error("Email already in use");
-        return;
-      }
-    });
+    if (
+      userList.some(
+        (userIs) => userIs.email === data.email && userIs.email !== user.email
+      )
+    ) {
+      toast.error("Email already in use");
+      return;
+    } else {
+      const updatedUserList = userList.map((userIs) => {
+        if (userIs.email === user.email) {
+          return {
+            ...userIs,
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            mobileNumber: data.mobileNumber,
+          };
+        }
+        return userIs;
+      });
 
-    const filterUserList = userList.filter((userIs) => {
-      if (userIs.email === user.email) {
-        return {
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          mobileNumber: data.mobileNumber,
-          password: user.password,
-        };
-      }
-    });
-    dispatch(updateUser(filterUserList));
+      dispatch(updateUser(updatedUserList));
 
-    const newUser = {
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      mobileNumber: data.mobileNumber,
-      password: user.password,
-    };
-    dispatch(setUser(newUser));
-    toast.success("Profile Updated");
-    router.push("/");
+      const newUser = {
+        ...user,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        mobileNumber: data.mobileNumber,
+      };
+      dispatch(setUser(newUser));
+
+      toast.success("Profile Updated");
+      router.push("/");
+    }
   };
   return (
     <div>

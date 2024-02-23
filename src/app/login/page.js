@@ -16,13 +16,14 @@ const Login = () => {
   const router = useRouter();
 
   const users = useSelector((state) => state.usersSignUp.usersSignUp);
+  const user = useSelector((state) => state.user.user);
   const onSubmit = (data) => {
-    const filterUser = users.filter((user) => {
+    const filterUser = users.filter((userIs) => {
       if (
-        user.email === data.email &&
-        dcrypt.compare(data.password, user.password)
+        userIs.email === data.email &&
+        dcrypt.compare(data.password, userIs.password)
       ) {
-        return user;
+        return userIs;
       }
     });
 
